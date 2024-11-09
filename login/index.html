@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vape+ | Login/Register</title>
+    <!-- BOXICONS -->
+    <link href="assets/boxicons/css/boxicons.min.css" rel="stylesheet" />
+    <!-- STYLE -->
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <style>
+      /* Your existing styles here */
+      
+      /* Global Notification Styles */
+      .notification {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 20px;
+        background-color: rgba(0, 0, 0, 0.7);
+        color: white;
+        border-radius: 10px;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.5s ease, visibility 0.5s;
+      }
+
+      .notification.visible {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .notification.success {
+        background-color: rgba(76, 175, 80, 0.9); /* Green */
+      }
+
+      .notification.error {
+        background-color: rgba(244, 67, 54, 0.9); /* Red */
+      }
+
+      .notification.warning {
+        background-color: rgba(255, 193, 7, 0.9); /* Yellow */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="form-container">
+      <div class="col col-1">
+        <div class="image-layer">
+          <img src="assets/img/white-outline.png" class="form-image-main" />
+          <img src="assets/img/dots.png" class="form-image dots" />
+          <img src="assets/img/coin.png" class="form-image coin" />
+          <img src="assets/img/spring.png" class="form-image spring" />
+          <img src="assets/img/rocket.png" class="form-image rocket" />
+          <img src="assets/img/cloud.png" class="form-image cloud" />
+          <img src="assets/img/stars.png" class="form-image stars" />
+        </div>
+        <p class="featured-words">
+          You're just minutes away from enhancing your exploiting experience
+          with <span>Vape+</span>
+        </p>
+      </div>
+
+      <div class="col col-2">
+        <div class="btn-box">
+          <button class="btn btn-1" id="login">Sign In</button>
+          <button class="btn btn-2" id="register">Sign Up</button>
+        </div>
+
+        <!-- Login Form Container -->
+        <div class="login-form">
+          <div class="form-title">
+            <span>Sign In</span>
+          </div>
+          <div class="form-inputs">
+            <div class="input-box">
+              <input
+                type="text"
+                id="loginEmail"
+                class="input-field"
+                placeholder="Username"
+                required
+              />
+              <i class="bx bx-user icon"></i>
+            </div>
+            <div class="input-box">
+              <input
+                type="password"
+                id="loginPassword"
+                class="input-field"
+                placeholder="Password"
+                required
+              />
+              <i class="bx bx-lock-alt icon"></i>
+            </div>
+            <div class="forgot-pass">
+              <a href="#">Forgot Password?</a>
+            </div>
+            <div class="input-box">
+              <button class="input-submit" id="loginSubmit">
+                <span>Sign In</span>
+                <i class="bx bx-right-arrow-alt"></i>
+              </button>
+            </div>
+          </div>
+          <div class="social-login">
+            <i class="bx bxl-google"></i>
+            <i class="bx bxl-facebook"></i>
+            <i class="bx bxl-twitter"></i>
+            <i class="bx bxl-github"></i>
+          </div>
+        </div>
+
+        <!-- Register Form Container -->
+        <div class="register-form">
+          <div class="form-title">
+            <span>Create Account</span>
+          </div>
+          <div class="form-inputs">
+            <div class="input-box">
+              <input
+                type="text"
+                id="registerEmail"
+                class="input-field"
+                placeholder="Email"
+                required
+                />
+                <i class="bx bx-envelope icon"></i>
+              </div>
+              <div class="input-box">
+                <input
+                type="text"
+                id="registerUsername"
+                class="input-field"
+                placeholder="Username"
+                required
+              />
+              <i class="bx bx-user icon"></i>
+            </div>
+            <div class="input-box">
+              <input
+                type="password"
+                id="registerPassword"
+                class="input-field"
+                placeholder="Password"
+                required
+              />
+              <i class="bx bx-lock-alt icon"></i>
+            </div>
+            <div class="forgot-pass">
+              <a href="#">Forgot Password?</a>
+            </div>
+            <div class="input-box">
+              <button class="input-submit" id="signUpSubmit">
+                <span>Sign Up</span>
+                <i class="bx bx-right-arrow-alt"></i>
+              </button>
+            </div>
+          </div>
+          <div class="social-login">
+            <i class="bx bxl-google"></i>
+            <i class="bx bxl-facebook"></i>
+            <i class="bx bxl-twitter"></i>
+            <i class="bx bxl-github"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Notification container -->
+    <div class="notification" id="global-notification"></div>
+
+    <script type="module" src="../utils/global-notification.js"></script>
+    <script type="module" src="../secripts/register.js"></script>
+    <script type="module" src="../secripts/login.js"></script>
+    <script src="assets/js/main.js"></script>
+  </body>
+</html>
