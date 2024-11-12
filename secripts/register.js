@@ -1,1 +1,60 @@
-(function(_0x2a8b21,_0x49767a){var _0x5b91dd=_0x116c,_0x5d86e1=_0x2a8b21();while(!![]){try{var _0x845755=-parseInt(_0x5b91dd(0x186))/0x1*(-parseInt(_0x5b91dd(0x180))/0x2)+parseInt(_0x5b91dd(0x185))/0x3+-parseInt(_0x5b91dd(0x182))/0x4+parseInt(_0x5b91dd(0x18a))/0x5+parseInt(_0x5b91dd(0x188))/0x6*(-parseInt(_0x5b91dd(0x181))/0x7)+-parseInt(_0x5b91dd(0x187))/0x8+parseInt(_0x5b91dd(0x183))/0x9*(-parseInt(_0x5b91dd(0x189))/0xa);if(_0x845755===_0x49767a)break;else _0x5d86e1['push'](_0x5d86e1['shift']());}catch(_0x3660b1){_0x5d86e1['push'](_0x5d86e1['shift']());}}}(_0x3cb7,0x6800a));function hi(){var _0x39021b=_0x116c;console['log'](_0x39021b(0x184));}function _0x116c(_0x31a549,_0x593b5f){var _0x3cb778=_0x3cb7();return _0x116c=function(_0x116c14,_0x48b793){_0x116c14=_0x116c14-0x180;var _0x2416ed=_0x3cb778[_0x116c14];return _0x2416ed;},_0x116c(_0x31a549,_0x593b5f);}hi();function _0x3cb7(){var _0x1dde49=['3660xQBVqw','548390RRymfI','2700510ERqmDx','1557462HerAwu','6615NBdluG','761000QkAdRP','63rrdQWG','Hello\x20World!','949002oJRMHJ','1mEAWne','468800fsZHls'];_0x3cb7=function(){return _0x1dde49;};return _0x3cb7();}
+// Import Firebase initialization and Firestore
+import { auth, db } from './firebaseauth.js';
+import { createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+import { doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+import { showGlobalNotification } from '../utils/global-notification.js';
+
+
+// Register form action
+document.getElementById('signUpSubmit').addEventListener('click', function (event) {
+  event.preventDefault();  // Prevent form submission
+  console.log("Sign-up button clicked");
+
+  // Get email, password and other fields
+  const email = document.getElementById('registerEmail').value;
+  const password = document.getElementById('registerPassword').value;
+  const username = document.getElementById('registerUsername').value;  // Assuming you have a username field
+
+  console.log("object", email , password , username)
+  if (email!='' && password!='' && username!='') {
+    // Create user with email and password in Firebase Authentication
+    createUserWithEmailAndPassword(auth, email, password)
+      .then(async (userCredential) => {
+        // User registration successful
+        const user = userCredential.user;
+
+        // Set the displayName (username) for the user
+        await updateProfile(user, {
+          displayName: username
+        });
+
+        // Store user details in Firestore
+        await setDoc(doc(db, "users", user.uid), {
+          username: username,
+          email: user.email,
+          password: password,  // Note: It's generally not recommended to store raw passwords; consider hashing
+          createdAt: new Date(),
+          deletedAt: null  // Add null for deletedAt as it's not yet deleted
+        });
+
+        // Store user data in sessionStorage
+        sessionStorage.setItem('user', JSON.stringify(user));
+
+        // Redirect to the account page
+        window.location.href = "../account/index.html";
+        showGlobalNotification('success', `Registration successful!`);
+        console.log('User registered and saved to Firestore:', user);
+      })
+      .catch((error) => {
+        // Handle errors
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.error('Registration error:', errorCode, errorMessage);
+        showGlobalNotification('error', `Error: ${errorMessage}`);
+
+      });
+  }else{
+    showGlobalNotification('warning', `Please fill all mandatory fields!`);
+  }
+
+});
