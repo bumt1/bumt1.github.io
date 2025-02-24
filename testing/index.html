@@ -68,10 +68,7 @@
 
         document.addEventListener("DOMContentLoaded", () => {
             questionElem.innerText = questions[currentQuestion];
-            document.documentElement.requestFullscreen().catch(err => {
-                console.log("Fullscreen request denied", err);
-            });
-            checkFullscreen();
+            container.style.display = "block";
         });
     </script>
 </body>
