@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Math Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+            user-select: none; /* Disable text selection */
+            background-color: #f4f4f4;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+        }
+        .question {
+            margin: 15px 0;
+            font-size: 18px;
+        }
+        /* Prevent screenshots by blurring content */
+        @media screen and (min-width: 0px) {
+            body.screenshot-protect {
+                filter: blur(10px);
+            }
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Prevent screenshots by detecting screenshot attempts and blurring the screen
+            document.addEventListener("keydown", function (event) {
+                if (event.key === "PrintScreen") {
+                    event.preventDefault();
+                    document.body.classList.add("screenshot-protect");
+                    alert("Screenshots are disabled!");
+                }
+            });
+
+            document.addEventListener("keyup", function (event) {
+                if (event.key === "PrintScreen") {
+                    navigator.clipboard.writeText(""); // Clear clipboard
+                }
+            });
+        });
+        
+        // Disable right-click and copying
+        document.addEventListener("contextmenu", event => event.preventDefault());
+        document.addEventListener("copy", event => event.preventDefault());
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Math Quiz</h1>
+        <div id="quiz-container">
+            <div class="question">1. Solve: 12 × 8</div>
+            <div class="question">2. What is the square root of 144?</div>
+            <div class="question">3. Solve for x: 3x + 5 = 20</div>
+            <div class="question">4. What is 15% of 200?</div>
+            <div class="question">5. Convert 0.75 to a fraction.</div>
+        </div>
+    </div>
+</body>
+</html>
