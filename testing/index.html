@@ -3,73 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure Math Test</title>
+    <title>Practice Form</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
             margin: 0;
             padding: 0;
-            background: #fff;
+            background: #f8f8f8;
         }
-        .container {
-            margin-top: 50px;
+        .login-container, .fullscreen-warning, .quiz-container {
             display: none;
         }
-        .question {
-            font-size: 20px;
-            font-weight: bold;
-            user-select: none;
-        }
-        input {
-            padding: 5px;
-            font-size: 18px;
+        .active {
+            display: block;
         }
         .blurred {
             filter: blur(10px);
         }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+        }
+        button {
+            padding: 10px;
+            border: none;
+            background: blue;
+            color: white;
+            cursor: pointer;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
-    <div class="container" id="test-container">
-        <p class="question" id="question">Loading question...</p>
-        <input type="text" id="answer" placeholder="Your answer">
+    <div class="login-container active container">
+        <h2>Login</h2>
+        <input type="text" placeholder="Username"><br><br>
+        <input type="password" placeholder="Password"><br><br>
+        <button onclick="login()">Login</button>
     </div>
-
+    
+    <div class="fullscreen-warning container">
+        <h2>You need to be in fullscreen to view this webpage.</h2>
+        <button onclick="enterFullscreen()">Go Fullscreen</button>
+    </div>
+    
+    <div class="quiz-container container">
+        <h2 id="question-title">Question 1</h2>
+        <p id="question-text">What is 5 + 3?</p>
+        <div id="answers">
+            <button onclick="nextQuestion(0)">6</button>
+            <button onclick="nextQuestion(1)">7</button>
+            <button onclick="nextQuestion(2)">8</button>
+            <button onclick="nextQuestion(3)">9</button>
+        </div>
+    </div>
+    
     <script>
         const questions = [
-            "5 + 3 = ?", "12 - 4 = ?", "3 x 4 = ?", "16 / 2 = ?", "9 + 6 = ?",
-            "20 - 5 = ?", "7 x 3 = ?", "18 / 2 = ?", "15 + 4 = ?", "30 - 10 = ?"
+            { question: "What is 5 + 3?", answers: ["6", "7", "8", "9"], correct: 2 },
+            { question: "What is 10 - 4?", answers: ["5", "6", "7", "8"], correct: 1 },
+            { question: "What is 3 x 3?", answers: ["6", "7", "8", "9"], correct: 3 },
+            { question: "What is 16 / 4?", answers: ["2", "3", "4", "5"], correct: 2 },
+            { question: "What is 7 + 2?", answers: ["8", "9", "10", "11"], correct: 1 }
         ];
+
         let currentQuestion = 0;
-        const questionElem = document.getElementById("question");
-        const container = document.getElementById("test-container");
-        
-        function checkFullscreen() {
-            if (!document.fullscreenElement) {
-                container.style.display = "none";
-            } else {
-                container.style.display = "block";
-            }
+
+        function login() {
+            document.querySelector('.login-container').classList.remove('active');
+            document.querySelector('.fullscreen-warning').classList.add('active');
         }
 
-        function blurScreen() {
-            document.body.classList.add("blurred");
-            setTimeout(() => document.body.classList.remove("blurred"), 2000);
+        function enterFullscreen() {
+            document.documentElement.requestFullscreen();
+            document.querySelector('.fullscreen-warning').classList.remove('active');
+            document.querySelector('.quiz-container').classList.add('active');
+        }
+
+        function checkFullscreen() {
+            if (!document.fullscreenElement) {
+                document.querySelector('.quiz-container').classList.remove('active');
+                document.querySelector('.fullscreen-warning').classList.add('active');
+            }
         }
 
         document.addEventListener("fullscreenchange", checkFullscreen);
-        document.addEventListener("keydown", (e) => {
-            if (e.key === "PrintScreen") {
-                blurScreen();
-                e.preventDefault();
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'PrintScreen') {
+                document.body.classList.add('blurred');
+                alert('Screenshots are disabled!');
+            } else if (e.key === 'Meta' || e.key === 'Escape') {
+                checkFullscreen();
             }
         });
-
-        document.addEventListener("DOMContentLoaded", () => {
-            questionElem.innerText = questions[currentQuestion];
-            container.style.display = "block";
+        
+        document.addEventListener('keyup', (e) => {
+            setTimeout(() => {
+                document.body.classList.remove('blurred');
+            }, 500);
         });
+
+        window.addEventListener('blur', () => {
+            document.body.classList.add('blurred');
+        });
+
+        window.addEventListener('focus', () => {
+            setTimeout(() => {
+                document.body.classList.remove('blurred');
+            }, 500);
+        });
+
+        function nextQuestion(selected) {
+            currentQuestion++;
+            if (currentQuestion >= questions.length) {
+                alert("Quiz Complete!");
+                return;
+            }
+            document.getElementById("question-title").innerText = `Question ${currentQuestion + 1}`;
+            document.getElementById("question-text").innerText = questions[currentQuestion].question;
+            let answerButtons = document.getElementById("answers");
+            answerButtons.innerHTML = "";
+            questions[currentQuestion].answers.forEach((answer, index) => {
+                let button = document.createElement("button");
+                button.innerText = answer;
+                button.onclick = () => nextQuestion(index);
+                answerButtons.appendChild(button);
+            });
+        }
     </script>
 </body>
 </html>
