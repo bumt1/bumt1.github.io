@@ -11,15 +11,15 @@
             margin: 0;
             padding: 0;
             background: #fff;
-            display: none;
         }
         .container {
             margin-top: 50px;
+            display: none;
         }
         .question {
             font-size: 20px;
             font-weight: bold;
-            user-select: none; /* Prevent copying */
+            user-select: none;
         }
         input {
             padding: 5px;
@@ -42,13 +42,14 @@
             "20 - 5 = ?", "7 x 3 = ?", "18 / 2 = ?", "15 + 4 = ?", "30 - 10 = ?"
         ];
         let currentQuestion = 0;
-        document.getElementById("question").innerText = questions[currentQuestion];
-
+        const questionElem = document.getElementById("question");
+        const container = document.getElementById("test-container");
+        
         function checkFullscreen() {
             if (!document.fullscreenElement) {
-                document.body.style.display = "none";
+                container.style.display = "none";
             } else {
-                document.body.style.display = "block";
+                container.style.display = "block";
             }
         }
 
@@ -66,9 +67,10 @@
         });
 
         document.addEventListener("DOMContentLoaded", () => {
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen();
-            }
+            questionElem.innerText = questions[currentQuestion];
+            document.documentElement.requestFullscreen().catch(err => {
+                console.log("Fullscreen request denied", err);
+            });
             checkFullscreen();
         });
     </script>
